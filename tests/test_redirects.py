@@ -36,6 +36,32 @@ class TestRedirects(Base):
         Assert.equal(parsed_url.netloc, urlparse(url).netloc, 'Failed on %s \nUsing %s' % (url, param))
         Assert.equal(parsed_url.query, urlencode(param), 'Failed on %s \nUsing %s' % (url, param))
 
+    def test_that_checks_firefox_nineteen_redirects_for_win8(self,testsetup):
+        #This test checks that the product firefox-19.0 redirects to firefox-19.0.1 on Windows 8
+        #
+        user_agent ="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)"
+        param = {
+            'product': 'firefox-19.0',
+            'lang': 'en-US',
+            'os': 'win'
+        }
+        
+        url= testsetup.base_url
+        response = self._head_request(url, user_agent=user_agent, params=param)
+        Assert.contains( '19.0.1', response.url)
+    
+    def test_that_checks_other_windows_user_agents_for_firefox_nineteen_redirects(self, testsetup):
+        #This test checks that Windows user agents below NT 6.2 are redirected to firefox-19.0
+        user_agent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)"
+        param = {
+            'product': 'firefox-19.0',
+            'lang': 'en-US',
+            'os': 'win'
+        }
+        url = testsetup.base_url
+        response = self._head_request(url, user_agent=user_agent, params=param)
+        Assert.contains("19.0.exe", response.url)
+        
     def test_that_checks_redirect_using_locales_and_os(self, testsetup, lang, os):
 
         url = testsetup.base_url
