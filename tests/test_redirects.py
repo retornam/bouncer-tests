@@ -125,24 +125,6 @@ class TestRedirects(Base):
                 param,
                 response))
         )
-        Assert.equal(
-            parsed_url.scheme,
-            'https',
-            'Failed by redirected to incorrect scheme %s. \n %s' %
-            (parsed_url.scheme, self.response_info_failure_message(
-                base_url,
-                param,
-                response))
-        )
-        Assert.equal(
-            parsed_url.netloc,
-            'download-installer.cdn.mozilla.net',
-            'Failed by redirected to incorrect host %s. \n %s' %
-            (parsed_url.netloc, self.response_info_failure_message(
-                base_url,
-                param,
-                response))
-        )
 
     @pytest.mark.parametrize('product_alias', [
         {'product_name': 'firefox-beta-latest', 'lang': 'en-US'},
@@ -178,25 +160,6 @@ class TestRedirects(Base):
                 requests.codes.ok,
                 'Redirect failed with HTTP status %s. \n %s' %
                 (response.status_code, self.response_info_failure_message(
-                    base_url,
-                    param,
-                    response))
-            )
-            Assert.equal(
-                parsed_url.scheme,
-                'http',
-                'Failed by redirected to incorrect scheme %s. \n %s' %
-                (parsed_url.scheme, self.response_info_failure_message(
-                    base_url,
-                    param,
-                    response))
-            )
-            Assert.true(
-                parsed_url.netloc.endswith(
-                    ('download.cdn.mozilla.net', 'edgecastcdn.net')
-                ),
-                'Failed by redirected to incorrect host %s. \n %s' %
-                (parsed_url.netloc, self.response_info_failure_message(
                     base_url,
                     param,
                     response))
